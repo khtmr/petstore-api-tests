@@ -1,2 +1,2 @@
 # petstore-api-tests
-Tесты API для Swagger PetStore + тест-кейсы и баг-репорты
+Тестирование API Swagger PetStore. Проект для портфолио QA-инженера.
