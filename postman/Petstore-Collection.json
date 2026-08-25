@@ -1,0 +1,510 @@
+{
+  "info": {
+    "_postman_id": "82426f7c-28d9-4150-b1bd-f9a4114d363d",
+    "name": "Petstore tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54378437"
+  },
+  "item": [
+    {
+      "name": "Possitive tests",
+      "item": [
+        {
+          "name": "200 Add a new pet to the store",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверка статуса\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// Проверка, что в ответе есть id\r",
+                  "pm.test(\"Response has id\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "// Сохраняем id в переменную окружения для следующих запросов\r",
+                  "var jsonData = pm.response.json();\r",
+                  "pm.environment.set(\"petId\", jsonData.id);\r",
+                  "\r",
+                  "console.log(\"ID сохранён: \" + pm.environment.get(\"petId\"));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{$randomInt}},\r\n  \"category\": {\r\n    \"id\": 1,\r\n    \"name\": \"dogs\"\r\n  },\r\n  \"name\": \"Marsik\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{store_url}}/pet",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "200 Find pet by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Pet ID matches requested\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.id).to.eql(parseInt(pm.variables.get(\"petId\")));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/ecmascript",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{store_url}}/pet/{{petId}}",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "200 Update an existing pet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Pet ID matches requested\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.id).to.eql(parseInt(pm.variables.get(\"petId\")));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": 1,\r\n    \"name\": \"superDogs\"\r\n  },\r\n  \"name\": \"superMarsik\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"sold\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{store_url}}/pet",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "200 Deletes a pet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{store_url}}/pet/{{petId}}",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "404 Find pet by ID Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Статус 404 (питомец удалён)\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/ecmascript",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{store_url}}/pet/{{petId}}",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet",
+                "{{petId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "🐞 200 Finds Pets by status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{store_url}}/pet/findByStatus?status=available&status=sold&status=pending",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet",
+                "findByStatus"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "available"
+                },
+                {
+                  "key": "status",
+                  "value": "sold"
+                },
+                {
+                  "key": "status",
+                  "value": "pending"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative tests",
+      "item": [
+        {
+          "name": "🐞 400 Add a new pet (negative id)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверка статуса\r",
+                  "pm.test(\"Status code is 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "// Проверка, что в ответе есть id\r",
+                  "pm.test(\"Response has id\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "// Сохраняем id в переменную окружения для следующих запросов\r",
+                  "var jsonData = pm.response.json();\r",
+                  "pm.environment.set(\"petId\", jsonData.id);\r",
+                  "\r",
+                  "console.log(\"ID сохранён: \" + pm.environment.get(\"petId\"));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": -12,\r\n  \"category\": {\r\n    \"id\": 1,\r\n    \"name\": \"test\"\r\n  },\r\n  \"name\": \"testName\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{store_url}}/pet",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "🐞 400 Add a new pet (overflow ID)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверка статуса\r",
+                  "pm.test(\"Status code is 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "// Проверка, что в ответе есть id\r",
+                  "pm.test(\"Response has id\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "// Сохраняем id в переменную окружения для следующих запросов\r",
+                  "var jsonData = pm.response.json();\r",
+                  "pm.environment.set(\"petId\", jsonData.id);\r",
+                  "\r",
+                  "console.log(\"ID сохранён: \" + pm.environment.get(\"petId\"));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 9223372036854775808,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"dogs\"\r\n  },\r\n  \"name\": \"testName\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{store_url}}/pet",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "🐞 400 Add a new pet (empty name)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверка статуса\r",
+                  "pm.test(\"Status code is 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "// Проверка, что в ответе есть id\r",
+                  "pm.test(\"Response has id\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "// Сохраняем id в переменную окружения для следующих запросов\r",
+                  "var jsonData = pm.response.json();\r",
+                  "pm.environment.set(\"petId\", jsonData.id);\r",
+                  "\r",
+                  "console.log(\"ID сохранён: \" + pm.environment.get(\"petId\"));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 12,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"test\"\r\n  },\r\n  \"name\": \"\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{store_url}}/pet",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "🐞 400 Add a new pet (without field name)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверка статуса\r",
+                  "pm.test(\"Status code is 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "// Проверка, что в ответе есть id\r",
+                  "pm.test(\"Response has id\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "// Сохраняем id в переменную окружения для следующих запросов\r",
+                  "var jsonData = pm.response.json();\r",
+                  "pm.environment.set(\"petId\", jsonData.id);\r",
+                  "\r",
+                  "console.log(\"ID сохранён: \" + pm.environment.get(\"petId\"));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 1232,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"dogs\"\r\n  },\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{store_url}}/pet",
+              "host": [
+                "{{store_url}}"
+              ],
+              "path": [
+                "pet"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
