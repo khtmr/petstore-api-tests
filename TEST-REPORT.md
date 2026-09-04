@@ -91,7 +91,7 @@
 
 ---
 
-## 7. Приложения
+## 6. Приложения
 
 - [Тест-кейсы (TEST-CASES.md)](TEST-CASES.md)
 - [Баг-репорты (BUG-REPORT.md)](BUG-REPORT.md)
